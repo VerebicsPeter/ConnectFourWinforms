@@ -4,7 +4,7 @@ namespace ConnectFour
 {
     public partial class MainWindow : Form
     {
-        private Game _game = new Game(10, 10);
+        private Game _game = new Game(7, 7);
 
         public MainWindow()
         {

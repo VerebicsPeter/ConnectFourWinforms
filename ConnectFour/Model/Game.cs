@@ -14,7 +14,7 @@ namespace ConnectFour.Model
 
     internal enum GameState 
     {
-        NONE, WON_RED, WON_YELLOW, DRAW
+        NONE, WON_RED, WON_YELLOW
     }
 
     internal class Game
@@ -25,8 +25,7 @@ namespace ConnectFour.Model
         public Player    CurrentPlayer;
         public GameState CurrentState;
 
-        // Should take size as arguments!
-        public Game(int height, int width)
+        public Game (int height, int width)
         {
             _h = height; _w = width;
             Tiles = new Tile[_h, _w];
@@ -39,7 +38,7 @@ namespace ConnectFour.Model
             CurrentPlayer = Player.RED;
         }
 
-        public void Move(int col)
+        public void Move (int col)
         {
             int row = GetRow(col);
             if (row > -1)
@@ -60,7 +59,7 @@ namespace ConnectFour.Model
             }
         }
 
-        private int GetRow(int col)
+        private int GetRow (int col)
         {
             for (int i = _h - 1; i > -1; i--)
             {
@@ -72,10 +71,89 @@ namespace ConnectFour.Model
             return -1;
         }
 
+        public GameState GetCurrentState()
+        {
+            // horizontals
+            for (int i = 0; i < _h; i++)
+            {
+                Stack<TileValue> stack = new();
+
+                for (int j = 0; j < _w; j++)
+                {
+                    if (!Tiles[i, j].IsEmpty())
+                    {
+                        if (stack.Count == 0)
+                        {
+                            stack.Push(Tiles[i, j].Value);
+                        }
+                        else
+                        {
+                            if (stack.Peek() == Tiles[i, j].Value)
+                            {
+                                stack.Push(Tiles[i, j].Value);
+                            }
+                            else
+                            {
+                                stack.Clear();
+                                stack.Push(Tiles[i, j].Value);
+                            }
+                        }
+                    }
+                    else stack.Clear();
+
+                    if (stack.Count == 4)
+                    {
+                        if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
+                        return GameState.WON_YELLOW;
+                    }
+                }
+            }
+
+            // verticals
+            for (int j = 0; j < _w; j++) // cols
+            {
+                Stack<TileValue> stack = new();
+
+                for (int i = 0; i < _h; i++) // rows
+                {
+                    if (!Tiles[i, j].IsEmpty())
+                    {
+                        if (stack.Count == 0)
+                        {
+                            stack.Push(Tiles[i, j].Value);
+                        }
+                        else
+                        {
+                            if (stack.Peek() == Tiles[i, j].Value)
+                            {
+                                stack.Push(Tiles[i, j].Value);
+                            }
+                            else
+                            {
+                                stack.Clear();
+                                stack.Push(Tiles[i, j].Value);
+                            }
+                        }
+                    }
+                    else stack.Clear();
+
+                    if (stack.Count == 4)
+                    {
+                        if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
+                        return GameState.WON_YELLOW;
+                    }
+                }
+            }
+
+
+
+            return GameState.NONE;
+        }
+
         public void PrintGame() // for console only
         {
-            for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++)
+            for (int i = 0; i < _h; i++) {
+                for (int j = 0; j < _w; j++)
                 {
                     if (Tiles[i, j].IsEmpty())  Console.Write("- ");
                     if (Tiles[i, j].IsRed())    Console.Write("R ");
@@ -89,19 +167,37 @@ namespace ConnectFour.Model
         public void Play() // for console only
         {
             PrintGame();
-            while (true) {
+            for (int i = 0; i < _h * _w; i++)
+            {
                 int col;
+
                 do {
                     try {
-                        col = Int32.Parse(Console.ReadLine());
+                        col = Int32.Parse(Console.ReadLine()!);
                     }
-                    catch {
+                    catch (Exception e) {
+                        Console.WriteLine(e.Message);
+
                         col = 0;
                     }
                 } while (col < -1 || col > _w - 1);
+                
                 Move(col);
-
                 PrintGame();
+                CurrentState = GetCurrentState();
+                if (CurrentState != GameState.NONE) break;
+            }
+            if (CurrentState == GameState.WON_RED)
+            {
+                Console.WriteLine("RED wins!");
+            }
+            if (CurrentState == GameState.WON_YELLOW)
+            {
+                Console.WriteLine("YELLOW wins!");
+            }
+            if (CurrentState == GameState.NONE)
+            {
+                Console.WriteLine("Draw!");
             }
         }
     }
