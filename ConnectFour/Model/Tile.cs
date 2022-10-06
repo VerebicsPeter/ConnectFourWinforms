@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace ConnectFour.Model
 {
-    public enum TileValue 
-    { 
+    internal enum TileValue 
+    {
         EMPTY, RED, YELLOW 
     }
 
