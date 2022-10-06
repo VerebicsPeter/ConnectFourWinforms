@@ -9,10 +9,6 @@ namespace ConnectFour
         public MainWindow()
         {
             InitializeComponent();
-
-            Console.WriteLine("\nConsole for form MainWindow:\n");
-
-            _game.Play(); // console testing method
         }
     }
 }

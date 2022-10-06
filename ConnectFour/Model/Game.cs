@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-
-namespace ConnectFour.Model
+﻿namespace ConnectFour.Model
 {
     internal enum Player
     {
         RED, YELLOW
     }
 
-    internal enum GameState 
+    internal enum GameState
     {
         NONE, WON_RED, WON_YELLOW
     }
@@ -96,7 +88,6 @@ namespace ConnectFour.Model
             else stack.Clear();
         }
 
-        //TODO: func to handle return (and stack)
         public GameState GetCurrentState()
         {
             // Horizontals
@@ -144,8 +135,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -170,8 +160,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -179,7 +168,7 @@ namespace ConnectFour.Model
                     }
                 }
             }
-            // Lower diagonals
+            // Lower diagonals (excluding the main diagonal)
             for (int k = 1; k < _h; k++)
             {
                 Stack<TileValue> stack = new();
@@ -192,8 +181,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -204,57 +192,6 @@ namespace ConnectFour.Model
             #endregion
 
             return GameState.NONE;
-        }
-
-        public void PrintGame() // for console only
-        {
-            for (int i = 0; i < _h; i++) {
-                for (int j = 0; j < _w; j++)
-                {
-                    if (Tiles[i, j].IsEmpty())  Console.Write("- ");
-                    if (Tiles[i, j].IsRed())    Console.Write("R ");
-                    if (Tiles[i, j].IsYellow()) Console.Write("Y ");
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine();
-        }
-
-        public void Play() // for console only
-        {
-            PrintGame();
-            for (int i = 0; i < _h * _w; i++)
-            {
-                int col;
-
-                do {
-                    try {
-                        col = Int32.Parse(Console.ReadLine()!);
-                    }
-                    catch (Exception e) {
-                        Console.WriteLine(e.Message);
-
-                        col = 0;
-                    }
-                } while (col < -1 || col > _w - 1);
-                
-                Move(col);
-                PrintGame();
-                CurrentState = GetCurrentState();
-                if (CurrentState != GameState.NONE) break;
-            }
-            if (CurrentState == GameState.WON_RED)
-            {
-                Console.WriteLine("RED wins!");
-            }
-            if (CurrentState == GameState.WON_YELLOW)
-            {
-                Console.WriteLine("YELLOW wins!");
-            }
-            if (CurrentState == GameState.NONE)
-            {
-                Console.WriteLine("Draw!");
-            }
         }
     }
 }
