@@ -12,7 +12,7 @@ namespace ConnectFour
 
             Console.WriteLine("\nConsole for form MainWindow:\n");
 
-            _game.Play(); // console testing method
+            _game.Play(); // console testing method call
         }
     }
 }

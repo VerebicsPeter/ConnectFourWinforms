@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-
-namespace ConnectFour.Model
+﻿namespace ConnectFour.Model
 {
     internal enum Player
     {
@@ -72,31 +64,6 @@ namespace ConnectFour.Model
             return -1;
         }
 
-        private void PushSameTile(int i, int j, Stack<TileValue> stack)
-        {
-            if (!Tiles[i, j].IsEmpty())
-            {
-                if (stack.Count == 0)
-                {
-                    stack.Push(Tiles[i, j].Value);
-                }
-                else
-                {
-                    if (stack.Peek() == Tiles[i, j].Value)
-                    {
-                        stack.Push(Tiles[i, j].Value);
-                    }
-                    else
-                    {
-                        stack.Clear();
-                        stack.Push(Tiles[i, j].Value);
-                    }
-                }
-            }
-            else stack.Clear();
-        }
-
-        //TODO: func to handle return (and stack)
         public GameState GetCurrentState()
         {
             // Horizontals
@@ -144,8 +111,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -156,7 +122,6 @@ namespace ConnectFour.Model
             #endregion
 
             #region // Left diagonals
-
             // Upper diagonals (including the main diagonal)
             for (int k = 0; k < _w; k++)
             {
@@ -170,8 +135,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -192,8 +156,7 @@ namespace ConnectFour.Model
                         {
                             PushSameTile(i, j, stack);
 
-                            if (stack.Count == 4)
-                            {
+                            if (stack.Count == 4) {
                                 if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                                 return GameState.WON_YELLOW;
                             }
@@ -204,6 +167,29 @@ namespace ConnectFour.Model
             #endregion
 
             return GameState.NONE;
+        }
+
+        private void PushSameTile(int i, int j, Stack<TileValue> stack)
+        {
+            if (!Tiles[i, j].IsEmpty())
+            {
+                if (stack.Count == 0)
+                {
+                    stack.Push(Tiles[i, j].Value);
+                }
+                else
+                {
+                    if (stack.Peek() == Tiles[i, j].Value)
+                    {
+                        stack.Push(Tiles[i, j].Value);
+                    }
+                    else {
+                        stack.Clear();
+                        stack.Push(Tiles[i, j].Value);
+                    }
+                }
+            }
+            else stack.Clear();
         }
 
         public void PrintGame() // for console only
