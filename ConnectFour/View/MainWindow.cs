@@ -4,7 +4,7 @@ namespace ConnectFour
 {
     public partial class MainWindow : Form
     {
-        private Game _game = new Game();
+        private Game _game = new Game(10, 10);
 
         public MainWindow()
         {
@@ -12,7 +12,7 @@ namespace ConnectFour
 
             Console.WriteLine("\nConsole for form MainWindow:\n");
 
-            _game.PrintGame();
+            _game.Play();
         }
     }
 }
