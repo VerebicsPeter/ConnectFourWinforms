@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -71,81 +72,136 @@ namespace ConnectFour.Model
             return -1;
         }
 
+        private void PushSameTile(int i, int j, Stack<TileValue> stack)
+        {
+            if (!Tiles[i, j].IsEmpty())
+            {
+                if (stack.Count == 0)
+                {
+                    stack.Push(Tiles[i, j].Value);
+                }
+                else
+                {
+                    if (stack.Peek() == Tiles[i, j].Value)
+                    {
+                        stack.Push(Tiles[i, j].Value);
+                    }
+                    else
+                    {
+                        stack.Clear();
+                        stack.Push(Tiles[i, j].Value);
+                    }
+                }
+            }
+            else stack.Clear();
+        }
+
+        //TODO: func to handle return (and stack)
         public GameState GetCurrentState()
         {
-            // horizontals
+            // Horizontals
             for (int i = 0; i < _h; i++)
             {
                 Stack<TileValue> stack = new();
 
                 for (int j = 0; j < _w; j++)
                 {
-                    if (!Tiles[i, j].IsEmpty())
-                    {
-                        if (stack.Count == 0)
-                        {
-                            stack.Push(Tiles[i, j].Value);
-                        }
-                        else
-                        {
-                            if (stack.Peek() == Tiles[i, j].Value)
-                            {
-                                stack.Push(Tiles[i, j].Value);
-                            }
-                            else
-                            {
-                                stack.Clear();
-                                stack.Push(Tiles[i, j].Value);
-                            }
-                        }
-                    }
-                    else stack.Clear();
+                    PushSameTile(i, j, stack);
 
-                    if (stack.Count == 4)
-                    {
+                    if (stack.Count == 4) {
                         if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                         return GameState.WON_YELLOW;
                     }
                 }
             }
-
-            // verticals
+            // Verticals
             for (int j = 0; j < _w; j++) // cols
             {
                 Stack<TileValue> stack = new();
 
                 for (int i = 0; i < _h; i++) // rows
                 {
-                    if (!Tiles[i, j].IsEmpty())
-                    {
-                        if (stack.Count == 0)
-                        {
-                            stack.Push(Tiles[i, j].Value);
-                        }
-                        else
-                        {
-                            if (stack.Peek() == Tiles[i, j].Value)
-                            {
-                                stack.Push(Tiles[i, j].Value);
-                            }
-                            else
-                            {
-                                stack.Clear();
-                                stack.Push(Tiles[i, j].Value);
-                            }
-                        }
-                    }
-                    else stack.Clear();
+                    PushSameTile(i, j, stack);
 
-                    if (stack.Count == 4)
-                    {
+                    if (stack.Count == 4) {
                         if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
                         return GameState.WON_YELLOW;
                     }
                 }
             }
 
+            #region // Right diagonals
 
+            for (int k = 0; k < _h + _w; k++)
+            {
+                Stack<TileValue> stack = new();
+
+                for (int i = 0; i < _h; i++)
+                {
+                    for (int j = 0; j < _w; j++)
+                    {
+                        if (i + j == k)
+                        {
+                            PushSameTile(i, j, stack);
+
+                            if (stack.Count == 4)
+                            {
+                                if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
+                                return GameState.WON_YELLOW;
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region // Left diagonals
+
+            // Upper diagonals (including the main diagonal)
+            for (int k = 0; k < _w; k++)
+            {
+                Stack<TileValue> stack = new();
+
+                for (int i = 0; i < _h; i++)
+                {
+                    for (int j = 0; j < _w; j++)
+                    {
+                        if (j - i == k)
+                        {
+                            PushSameTile(i, j, stack);
+
+                            if (stack.Count == 4)
+                            {
+                                if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
+                                return GameState.WON_YELLOW;
+                            }
+                        }
+                    }
+                }
+            }
+            // Lower diagonals
+            for (int k = 1; k < _h; k++)
+            {
+                Stack<TileValue> stack = new();
+
+                for (int i = 0; i < _h; i++)
+                {
+                    for (int j = 0; j < _w; j++)
+                    {
+                        if (i - j == k)
+                        {
+                            PushSameTile(i, j, stack);
+
+                            if (stack.Count == 4)
+                            {
+                                if (stack.Peek() == TileValue.RED) return GameState.WON_RED;
+                                return GameState.WON_YELLOW;
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
 
             return GameState.NONE;
         }
