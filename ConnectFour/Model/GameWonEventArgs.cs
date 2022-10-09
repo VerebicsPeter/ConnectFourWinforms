@@ -6,9 +6,12 @@ namespace ConnectFour.Model
     {
         public GameState State { get; private set; }
 
-        public GameWonEventArgs(GameState state)
+        public List<Point> WinningCoordList { get; private set; }
+
+        public GameWonEventArgs(GameState state, Stack<Point> winningCoords)
         {
             State = state;
+            WinningCoordList = winningCoords.ToList();
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using System.Windows.Forms;
+
 using ConnectFour.Model;
 
 namespace ConnectFour
@@ -14,8 +14,8 @@ namespace ConnectFour
         public MainWindow()
         {
             InitializeComponent();
-            _pictureBoxGrid  = new PictureBox[20, 20];
-            _game            = new Game(20, 20);
+            _pictureBoxGrid  = new PictureBox[7, 7];
+            _game            = new Game(7, 7);
             _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
             _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
             _game.GameEnd     += new EventHandler(Game_GameEnded);
@@ -59,6 +59,27 @@ namespace ConnectFour
 
         private void Game_GameWon(object? sender, GameWonEventArgs e)
         {
+            foreach (var v in _game.WinningPointStack)
+            {
+                Console.WriteLine(v.ToString());
+            }
+
+            string path;
+            if (e.WinningCoordList[0].X == e.WinningCoordList[1].X)
+            {
+                path = "_horizontal";
+            }
+            else if (e.WinningCoordList[0].Y == e.WinningCoordList[1].Y)
+            {
+                path = "_vertical";
+            }
+            else path = "_diag";
+
+            for (int i = 0; i < e.WinningCoordList.Count; i++)
+            {
+                _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win{path}.png");
+            }
+            
             if (e.State == GameState.WON_BY_RED)
             {
                 MessageBox.Show("Red won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
@@ -67,7 +88,8 @@ namespace ConnectFour
             {
                 MessageBox.Show("Yellow won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            _game = new Game(4, 4);
+
+            _game.StartGame();
             GamePanel.Controls.Clear();
             InitializePictureGrid();
         }
@@ -75,7 +97,7 @@ namespace ConnectFour
         private void Game_GameEnded(object? sender, EventArgs e)
         {
             MessageBox.Show("Draw!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            _game = new Game(4, 4);
+            _game.StartGame();
             GamePanel.Controls.Clear();
             InitializePictureGrid();
         }
@@ -98,7 +120,8 @@ namespace ConnectFour
             PictureBox pictureBox = sender as PictureBox;
             
             int col = Convert.ToInt32(pictureBox!.Tag.ToString());
-            if (_game.GetRow(col) > -1 ) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.LightBlue;
+            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor
+              = _game.CurrentPlayer == Player.RED ? Color.PaleVioletRed : Color.FromArgb(128, Color.Yellow);
         }
 
         private void PictureBox_MouseLeave(object? sender, EventArgs e)
@@ -106,7 +129,7 @@ namespace ConnectFour
             PictureBox pictureBox = sender as PictureBox;
 
             int col = Convert.ToInt32(pictureBox!.Tag.ToString());
-            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.White;
+            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.WhiteSmoke;
         }
 
         #endregion
@@ -116,16 +139,15 @@ namespace ConnectFour
             GamePanel.Controls.Clear();
             InitializePictureGrid();
             
-            _game              = new Game(20, 20);
+            _game              = new Game(7, 7);
             _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
             _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
             _game.GameEnd     += new EventHandler(Game_GameEnded);
-
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-
+            BackColor = Color.WhiteSmoke;
         }
     }
 }

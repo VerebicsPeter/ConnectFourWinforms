@@ -50,7 +50,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(622, 31);
+            this.menuStrip.Size = new System.Drawing.Size(620, 31);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "Menu";
             // 
@@ -72,11 +72,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(622, 649);
+            this.ClientSize = new System.Drawing.Size(620, 643);
             this.Controls.Add(this.GamePanel);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Connect Four";
             this.Load += new System.EventHandler(this.MainWindow_Load);

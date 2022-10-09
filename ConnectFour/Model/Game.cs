@@ -17,10 +17,9 @@
 
         private readonly int _h, _w;
 
-        private Tile[,]   Tiles; // game table represented by tiles
+        private Tile[,]   Tiles; // Game table represented by tiles
         private Player    _currentPlayer;
         private GameState _currentState;
-        // TODO: moves counter
 
         #region Events
 
@@ -44,6 +43,7 @@
 
         public GameState CurrentState { get { return _currentState; } }
 
+        public Stack<Point> WinningPointStack { get; private set; }
         #endregion
 
         #region Constructor
@@ -52,9 +52,10 @@
         {
             _h = height; _w = width;
             Tiles = new Tile[_h, _w];
+            
+            WinningPointStack = new Stack<Point>();
 
             StartGame();
-
             Console.WriteLine("Game model instanciated.");
         }
         #endregion
@@ -83,17 +84,18 @@
                     if (_currentPlayer == Player.RED)
                     {
                         Tiles[row, col].Value = TileValue.RED;
-                        OnTileChanged(row, col, _currentPlayer);
                         
                     }
                     else
                     {
                         Tiles[row, col].Value = TileValue.YELLOW;
-                        OnTileChanged(row, col, _currentPlayer);
                     }
+                    OnTileChanged(row, col, _currentPlayer);
                     Console.WriteLine($"tile {row},{col} changed to {_currentPlayer}.");
-                    _currentPlayer = _currentPlayer == Player.RED ? Player.YELLOW : Player.RED; Moves++;
-                    _currentState  = GetCurrentState();
+                    _currentPlayer = _currentPlayer == Player.RED ? Player.YELLOW : Player.RED; Moves++; // set player
+                    _currentState  = GetCurrentState(); // set state
+                    
+                    //foreach (var coord in WinningPointStack) { Console.WriteLine(coord.ToString()); }
                     if (Moves == Height * Width)        OnGameEnd();
                     if (CurrentState != GameState.NONE) OnGameWon();
                 }
@@ -110,7 +112,7 @@
 
                 for (int j = 0; j < _w; j++)
                 {
-                    PushSameTile(i, j, stack);
+                    PushSameTile(i, j, stack, WinningPointStack);
 
                     if (stack.Count == 4)
                     {
@@ -126,7 +128,7 @@
 
                 for (int i = 0; i < _h; i++) // rows
                 {
-                    PushSameTile(i, j, stack);
+                    PushSameTile(i, j, stack, WinningPointStack);
 
                     if (stack.Count == 4)
                     {
@@ -147,7 +149,7 @@
                     {
                         if (i + j == k)
                         {
-                            PushSameTile(i, j, stack);
+                            PushSameTile(i, j, stack, WinningPointStack);
 
                             if (stack.Count == 4)
                             {
@@ -172,7 +174,7 @@
                     {
                         if (j - i == k)
                         {
-                            PushSameTile(i, j, stack);
+                            PushSameTile(i, j, stack, WinningPointStack);
 
                             if (stack.Count == 4)
                             {
@@ -194,7 +196,7 @@
                     {
                         if (i - j == k)
                         {
-                            PushSameTile(i, j, stack);
+                            PushSameTile(i, j, stack, WinningPointStack);
 
                             if (stack.Count == 4)
                             {
@@ -206,7 +208,7 @@
                 }
             }
             #endregion
-
+            
             return GameState.NONE;
         }
 
@@ -226,28 +228,28 @@
 
         #region Private Methods
 
-        private void PushSameTile(int i, int j, Stack<TileValue> stack)
+        private void PushSameTile(int i, int j, Stack<TileValue> valueStack, Stack<Point> pointStack)
         {
-            if (!Tiles[i, j].IsEmpty())
+            if (!Tiles[i, j].IsEmpty()) // if on an occupied tile
             {
-                if (stack.Count == 0)
+                if (valueStack.Count == 0) // if the stack is empty
                 {
-                    stack.Push(Tiles[i, j].Value);
+                    valueStack.Push(Tiles[i, j].Value); pointStack.Push(new Point(i, j));
                 }
-                else
+                else // if the stack has elements
                 {
-                    if (stack.Peek() == Tiles[i, j].Value)
+                    if (valueStack.Peek() == Tiles[i, j].Value) // if top is the same as actual tile
                     {
-                        stack.Push(Tiles[i, j].Value);
+                        valueStack.Push(Tiles[i, j].Value); pointStack.Push(new Point(i, j));
                     }
-                    else
+                    else // if the top is different
                     {
-                        stack.Clear();
-                        stack.Push(Tiles[i, j].Value);
+                        valueStack.Clear(); pointStack.Clear();
+                        valueStack.Push(Tiles[i, j].Value); pointStack.Push(new Point(i, j));
                     }
                 }
             }
-            else stack.Clear();
+            else { valueStack.Clear(); pointStack.Clear(); }
         }
 
         #endregion
@@ -270,9 +272,9 @@
 
         private void OnGameWon()
         {
-            if (GameWon != null) GameWon(this, new GameWonEventArgs(_currentState));
+            if (GameWon != null) GameWon(this, new GameWonEventArgs(_currentState, WinningPointStack));
         }
-
+        
         #endregion
     }
 }
