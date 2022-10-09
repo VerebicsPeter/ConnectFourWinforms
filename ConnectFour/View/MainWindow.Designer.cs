@@ -29,29 +29,30 @@
         private void InitializeComponent()
         {
             this.GamePanel = new System.Windows.Forms.Panel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // GamePanel
             // 
-            this.GamePanel.Location = new System.Drawing.Point(35, 34);
+            this.GamePanel.Location = new System.Drawing.Point(11, 35);
+            this.GamePanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.GamePanel.Name = "GamePanel";
-            this.GamePanel.Size = new System.Drawing.Size(675, 675);
+            this.GamePanel.Size = new System.Drawing.Size(600, 600);
             this.GamePanel.TabIndex = 0;
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(750, 31);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(622, 31);
+            this.menuStrip.TabIndex = 1;
+            this.menuStrip.Text = "Menu";
             // 
             // fileToolStripMenuItem
             // 
@@ -64,21 +65,23 @@
             // StartGameMenuItem
             // 
             this.StartGameMenuItem.Name = "StartGameMenuItem";
-            this.StartGameMenuItem.Size = new System.Drawing.Size(224, 28);
+            this.StartGameMenuItem.Size = new System.Drawing.Size(179, 28);
             this.StartGameMenuItem.Text = "Start Game";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(750, 721);
+            this.ClientSize = new System.Drawing.Size(622, 649);
             this.Controls.Add(this.GamePanel);
-            this.Controls.Add(this.menuStrip1);
-            this.MainMenuStrip = this.menuStrip1;
+            this.Controls.Add(this.menuStrip);
+            this.MainMenuStrip = this.menuStrip;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "MainWindow";
-            this.Text = "ConnectFour";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.Text = "Connect Four";
+            this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -87,7 +90,7 @@
         #endregion
 
         private Panel GamePanel;
-        private MenuStrip menuStrip1;
+        private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem StartGameMenuItem;
     }

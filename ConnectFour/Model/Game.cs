@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace ConnectFour.Model
+﻿namespace ConnectFour.Model
 {
     internal enum Player
     {
@@ -12,6 +10,7 @@ namespace ConnectFour.Model
         NONE, WON_BY_RED, WON_BY_YELLOW
     }
 
+    // Model for the game
     internal class Game
     {
         #region Private Fields
@@ -21,6 +20,15 @@ namespace ConnectFour.Model
         private Tile[,]   Tiles; // game table represented by tiles
         private Player    CurrentPlayer;
         private GameState CurrentState;
+        // TODO: moves counter
+
+        #region Events
+
+        public event EventHandler? GameEnd;
+        public event EventHandler<GameWonEventArgs>? GameWon;
+        public event EventHandler<TileChangedEventArgs>? TileChanged;
+
+        #endregion
 
         #endregion
 
@@ -40,6 +48,8 @@ namespace ConnectFour.Model
             Tiles = new Tile[_h, _w];
 
             StartGame();
+
+            Console.WriteLine("Game model instanciated.");
         }
         #endregion
 
@@ -51,10 +61,11 @@ namespace ConnectFour.Model
                 for (int j = 0; j < _w; j++)
                     Tiles[i, j] = new Tile();
 
-            CurrentState = GameState.NONE;
+            CurrentState  = GameState.NONE;
             CurrentPlayer = Player.RED;
         }
 
+        // Sets tile and changes current player
         public void Move(int col)
         {
             int row = GetRow(col);
@@ -65,17 +76,22 @@ namespace ConnectFour.Model
                     if (CurrentPlayer == Player.RED)
                     {
                         Tiles[row, col].Value = TileValue.RED;
+                        OnTileChanged(row, col, Player.RED);
+                        Console.WriteLine($"tile {row},{col} changed to {CurrentPlayer}.");
                         CurrentPlayer = Player.YELLOW;
                     }
                     else
                     {
                         Tiles[row, col].Value = TileValue.YELLOW;
+                        OnTileChanged(row, col, Player.YELLOW);
+                        Console.WriteLine($"tile {row},{col} changed to {CurrentPlayer}.");
                         CurrentPlayer = Player.RED;
                     }
                 }
             }
         }
 
+        // Checks and sets game state
         public GameState GetCurrentState()
         {
             // Horizontals
@@ -227,11 +243,18 @@ namespace ConnectFour.Model
 
         #endregion
 
-        #region Events
+        #region Event Triggers
 
-        public event EventHandler? GameEnd;
-        public event EventHandler<GameWonEventArgs>? GameWon;
-        public event EventHandler<TileChangedEventArgs>? TileChanged;
+        // TODO
+
+        private void OnTileChanged(int x, int y, Player player)
+        {
+            if (TileChanged != null)
+            {
+                Console.WriteLine("OnTileChanged()");
+                TileChanged(this, new TileChangedEventArgs(x, y, player));
+            }
+        }
 
         #endregion
     }
