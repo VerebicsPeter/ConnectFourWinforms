@@ -18,8 +18,8 @@
         private readonly int _h, _w;
 
         private Tile[,]   Tiles; // game table represented by tiles
-        private Player    CurrentPlayer;
-        private GameState CurrentState;
+        private Player    _currentPlayer;
+        private GameState _currentState;
         // TODO: moves counter
 
         #region Events
@@ -34,15 +34,21 @@
 
         #region Public Properties
 
+        public int Moves { get; private set; }
+
         public int Height { get { return _h; } }
 
         public int Width  { get { return _w; } }
+
+        public Player CurrentPlayer  { get { return _currentPlayer; } }
+
+        public GameState CurrentState { get { return _currentState; } }
 
         #endregion
 
         #region Constructor
 
-        public Game (int height = 6, int width = 7)
+        public Game (int height = 7, int width = 7)
         {
             _h = height; _w = width;
             Tiles = new Tile[_h, _w];
@@ -61,8 +67,9 @@
                 for (int j = 0; j < _w; j++)
                     Tiles[i, j] = new Tile();
 
-            CurrentState  = GameState.NONE;
-            CurrentPlayer = Player.RED;
+            _currentState  = GameState.NONE;
+            _currentPlayer = Player.RED;
+            Moves = 0;
         }
 
         // Sets tile and changes current player
@@ -73,20 +80,22 @@
             {
                 if (Tiles[row, col].IsEmpty())
                 {
-                    if (CurrentPlayer == Player.RED)
+                    if (_currentPlayer == Player.RED)
                     {
                         Tiles[row, col].Value = TileValue.RED;
-                        OnTileChanged(row, col, Player.RED);
-                        Console.WriteLine($"tile {row},{col} changed to {CurrentPlayer}.");
-                        CurrentPlayer = Player.YELLOW;
+                        OnTileChanged(row, col, _currentPlayer);
+                        
                     }
                     else
                     {
                         Tiles[row, col].Value = TileValue.YELLOW;
-                        OnTileChanged(row, col, Player.YELLOW);
-                        Console.WriteLine($"tile {row},{col} changed to {CurrentPlayer}.");
-                        CurrentPlayer = Player.RED;
+                        OnTileChanged(row, col, _currentPlayer);
                     }
+                    Console.WriteLine($"tile {row},{col} changed to {_currentPlayer}.");
+                    _currentPlayer = _currentPlayer == Player.RED ? Player.YELLOW : Player.RED; Moves++;
+                    _currentState  = GetCurrentState();
+                    if (Moves == Height * Width)        OnGameEnd();
+                    if (CurrentState != GameState.NONE) OnGameWon();
                 }
             }
         }
@@ -201,11 +210,7 @@
             return GameState.NONE;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private int GetRow (int col)
+        public int GetRow(int col)
         {
             for (int i = _h - 1; i > -1; i--)
             {
@@ -216,6 +221,10 @@
             }
             return -1;
         }
+
+        #endregion
+
+        #region Private Methods
 
         private void PushSameTile(int i, int j, Stack<TileValue> stack)
         {
@@ -245,15 +254,23 @@
 
         #region Event Triggers
 
-        // TODO
-
         private void OnTileChanged(int x, int y, Player player)
         {
             if (TileChanged != null)
             {
-                Console.WriteLine("OnTileChanged()");
                 TileChanged(this, new TileChangedEventArgs(x, y, player));
             }
+        }
+
+        // Event trigger for draw
+        private void OnGameEnd()
+        {
+            if (GameEnd != null) GameEnd(this, EventArgs.Empty);
+        }
+
+        private void OnGameWon()
+        {
+            if (GameWon != null) GameWon(this, new GameWonEventArgs(_currentState));
         }
 
         #endregion

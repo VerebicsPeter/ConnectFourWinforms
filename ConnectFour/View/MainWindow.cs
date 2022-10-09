@@ -1,20 +1,24 @@
+using System;
+using System.Windows.Forms;
 using ConnectFour.Model;
 
 namespace ConnectFour
 {
     public partial class MainWindow : Form
     {
-        // the game's model agregated inside view
+        // The game's model agregated inside view
         private Game _game;
-        // button grid for the fields of the game
+        // Picture box grid for the fields of the game
         private PictureBox[,] _pictureBoxGrid;
 
         public MainWindow()
         {
             InitializeComponent();
-            _game            = new Game(10, 10);
-            _pictureBoxGrid  = new PictureBox[10, 10];
+            _pictureBoxGrid  = new PictureBox[20, 20];
+            _game            = new Game(20, 20);
             _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
+            _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
+            _game.GameEnd     += new EventHandler(Game_GameEnded);
             StartGameMenuItem.Click += StartGameMenuItem_Click;
 
             InitializePictureGrid();
@@ -37,9 +41,10 @@ namespace ConnectFour
                         Tag      = $"{j}",
                         Image    = Image.FromFile(@".\resources\border.png")
                     };
-                    _pictureBoxGrid[i, j]        = pictureBox;
-                    _pictureBoxGrid[i, j].Click += PictureBox_Click;
-                    //_pictureBoxGrid[0, i].MouseHover += PictureBox_MouseHover;
+                    _pictureBoxGrid[i, j] = pictureBox;
+                    _pictureBoxGrid[i, j].Click      += PictureBox_Click;
+                    _pictureBoxGrid[i, j].MouseEnter += PictureBox_MouseEnter;
+                    _pictureBoxGrid[i, j].MouseLeave += PictureBox_MouseLeave;
                     GamePanel.Controls.Add(pictureBox);
                 }
             }
@@ -49,15 +54,37 @@ namespace ConnectFour
 
         private void Game_TileChanged(object? sender, TileChangedEventArgs e)
         {
-            Console.WriteLine("from event handler");
-            _pictureBoxGrid[e.X, e.Y].Image = e.PlayerOnTile == Player.RED ? Image.FromFile(@".\resources\red.png") 
-                                                                           : Image.FromFile(@".\resources\yellow.png");
-            _pictureBoxGrid[e.X, e.Y].Update();
+            _pictureBoxGrid[e.X, e.Y].BackColor = e.PlayerOnTile == Player.RED ? Color.Red : Color.Yellow;
+        }
+
+        private void Game_GameWon(object? sender, GameWonEventArgs e)
+        {
+            if (e.State == GameState.WON_BY_RED)
+            {
+                MessageBox.Show("Red won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            if (e.State == GameState.WON_BY_YELLOW)
+            {
+                MessageBox.Show("Yellow won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            _game = new Game(4, 4);
+            GamePanel.Controls.Clear();
+            InitializePictureGrid();
+        }
+
+        private void Game_GameEnded(object? sender, EventArgs e)
+        {
+            MessageBox.Show("Draw!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            _game = new Game(4, 4);
+            GamePanel.Controls.Clear();
+            InitializePictureGrid();
         }
 
         #endregion
 
-        private void PictureBox_Click (object? sender, EventArgs e)
+        #region Picture Box Event Handlers
+
+        private void PictureBox_Click(object? sender, EventArgs e)
         {
             if (sender != null)
             {
@@ -66,13 +93,33 @@ namespace ConnectFour
             }
         }
 
+        private void PictureBox_MouseEnter(object? sender, EventArgs e)
+        {
+            PictureBox pictureBox = sender as PictureBox;
+            
+            int col = Convert.ToInt32(pictureBox!.Tag.ToString());
+            if (_game.GetRow(col) > -1 ) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.LightBlue;
+        }
+
+        private void PictureBox_MouseLeave(object? sender, EventArgs e)
+        {
+            PictureBox pictureBox = sender as PictureBox;
+
+            int col = Convert.ToInt32(pictureBox!.Tag.ToString());
+            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.White;
+        }
+
+        #endregion
+
         private void StartGameMenuItem_Click (object? sender, EventArgs e)
         {
             GamePanel.Controls.Clear();
             InitializePictureGrid();
             
-            _game              = new Game(10, 10); // model instanciation
+            _game              = new Game(20, 20);
             _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
+            _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
+            _game.GameEnd     += new EventHandler(Game_GameEnded);
 
         }
 
