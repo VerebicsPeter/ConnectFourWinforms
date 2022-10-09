@@ -64,20 +64,9 @@ namespace ConnectFour
                 Console.WriteLine(v.ToString());
             }
 
-            string path;
-            if (e.WinningCoordList[0].X == e.WinningCoordList[1].X)
-            {
-                path = "_horizontal";
-            }
-            else if (e.WinningCoordList[0].Y == e.WinningCoordList[1].Y)
-            {
-                path = "_vertical";
-            }
-            else path = "_diag";
-
             for (int i = 0; i < e.WinningCoordList.Count; i++)
             {
-                _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win{path}.png");
+                _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win.png");
             }
             
             if (e.State == GameState.WON_BY_RED)
