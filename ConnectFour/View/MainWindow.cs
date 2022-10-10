@@ -1,5 +1,4 @@
 using System;
-
 using ConnectFour.Model;
 
 namespace ConnectFour
@@ -54,7 +53,7 @@ namespace ConnectFour
 
         private void Game_TileChanged(object? sender, TileChangedEventArgs e)
         {
-            _pictureBoxGrid[e.X, e.Y].BackColor = e.PlayerOnTile == Player.RED ? Color.Red : Color.Yellow;
+            _pictureBoxGrid[e.X, e.Y].Image = e.PlayerOnTile == Player.RED ? Image.FromFile(@".\resources\x.png") : Image.FromFile(@".\resources\o.png");
         }
 
         private void Game_GameWon(object? sender, GameWonEventArgs e)
@@ -63,19 +62,22 @@ namespace ConnectFour
             {
                 Console.WriteLine(v.ToString());
             }
-
-            for (int i = 0; i < e.WinningCoordList.Count; i++)
-            {
-                _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win.png");
-            }
             
             if (e.State == GameState.WON_BY_RED)
             {
-                MessageBox.Show("Red won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                for (int i = 0; i < e.WinningCoordList.Count; i++)
+                {
+                    _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win_x.png");
+                }
+                MessageBox.Show("X won!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             if (e.State == GameState.WON_BY_YELLOW)
             {
-                MessageBox.Show("Yellow won!", "Game Over!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                for (int i = 0; i < e.WinningCoordList.Count; i++)
+                {
+                    _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win_o.png");
+                }
+                MessageBox.Show("O won!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
 
             _game.StartGame();
@@ -109,8 +111,8 @@ namespace ConnectFour
             PictureBox pictureBox = sender as PictureBox;
             
             int col = Convert.ToInt32(pictureBox!.Tag.ToString());
-            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor
-              = _game.CurrentPlayer == Player.RED ? Color.PaleVioletRed : Color.FromArgb(128, Color.Yellow);
+            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].Image =
+                _game.CurrentPlayer == Player.RED ? Image.FromFile(@".\resources\prev_x.png") : Image.FromFile(@".\resources\prev_o.png");
         }
 
         private void PictureBox_MouseLeave(object? sender, EventArgs e)
@@ -118,7 +120,7 @@ namespace ConnectFour
             PictureBox pictureBox = sender as PictureBox;
 
             int col = Convert.ToInt32(pictureBox!.Tag.ToString());
-            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].BackColor = Color.WhiteSmoke;
+            if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].Image = Image.FromFile(@".\resources\border.png");
         }
 
         #endregion
