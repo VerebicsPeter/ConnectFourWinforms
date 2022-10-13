@@ -2,12 +2,12 @@
 {
     internal enum Player
     {
-        RED, YELLOW
+        X, O
     }
 
     internal enum GameState
     {
-        NONE, WON_BY_RED, WON_BY_YELLOW
+        NONE, WON_BY_X, WON_BY_O
     }
 
     // Model for the game
@@ -48,7 +48,7 @@
 
         #region Constructor
 
-        public Game (int height = 7, int width = 7)
+        public Game (int height = 10, int width = 10)
         {
             _h = height; _w = width;
             Tiles = new Tile[_h, _w];
@@ -69,7 +69,7 @@
                     Tiles[i, j] = new Tile();
 
             _currentState  = GameState.NONE;
-            _currentPlayer = Player.RED;
+            _currentPlayer = Player.X;
             Moves = 0;
         }
 
@@ -81,18 +81,18 @@
             {
                 if (Tiles[row, col].IsEmpty())
                 {
-                    if (_currentPlayer == Player.RED)
+                    if (_currentPlayer == Player.X)
                     {
-                        Tiles[row, col].Value = TileValue.RED;
+                        Tiles[row, col].Value = TileValue.X;
                         
                     }
                     else
                     {
-                        Tiles[row, col].Value = TileValue.YELLOW;
+                        Tiles[row, col].Value = TileValue.O;
                     }
                     OnTileChanged(row, col, _currentPlayer);
                     Console.WriteLine($"tile {row},{col} changed to {_currentPlayer}.");
-                    _currentPlayer = _currentPlayer == Player.RED ? Player.YELLOW : Player.RED; Moves++; // set player
+                    _currentPlayer = _currentPlayer == Player.X ? Player.O : Player.X; Moves++; // set player
                     _currentState  = GetCurrentState(); // set state
                     
                     //foreach (var coord in WinningPointStack) { Console.WriteLine(coord.ToString()); }
@@ -116,8 +116,8 @@
 
                     if (stack.Count == 4)
                     {
-                        if (stack.Peek() == TileValue.RED) return GameState.WON_BY_RED;
-                        return GameState.WON_BY_YELLOW;
+                        if (stack.Peek() == TileValue.X) return GameState.WON_BY_X;
+                        return GameState.WON_BY_O;
                     }
                 }
             }
@@ -132,8 +132,8 @@
 
                     if (stack.Count == 4)
                     {
-                        if (stack.Peek() == TileValue.RED) return GameState.WON_BY_RED;
-                        return GameState.WON_BY_YELLOW;
+                        if (stack.Peek() == TileValue.X) return GameState.WON_BY_X;
+                        return GameState.WON_BY_O;
                     }
                 }
             }
@@ -153,8 +153,8 @@
 
                             if (stack.Count == 4)
                             {
-                                if (stack.Peek() == TileValue.RED) return GameState.WON_BY_RED;
-                                return GameState.WON_BY_YELLOW;
+                                if (stack.Peek() == TileValue.X) return GameState.WON_BY_X;
+                                return GameState.WON_BY_O;
                             }
                         }
                     }
@@ -178,8 +178,8 @@
 
                             if (stack.Count == 4)
                             {
-                                if (stack.Peek() == TileValue.RED) return GameState.WON_BY_RED;
-                                return GameState.WON_BY_YELLOW;
+                                if (stack.Peek() == TileValue.X) return GameState.WON_BY_X;
+                                return GameState.WON_BY_O;
                             }
                         }
                     }
@@ -200,8 +200,8 @@
 
                             if (stack.Count == 4)
                             {
-                                if (stack.Peek() == TileValue.RED) return GameState.WON_BY_RED;
-                                return GameState.WON_BY_YELLOW;
+                                if (stack.Peek() == TileValue.X) return GameState.WON_BY_X;
+                                return GameState.WON_BY_O;
                             }
                         }
                     }

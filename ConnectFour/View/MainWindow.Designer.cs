@@ -28,15 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.GamePanel = new System.Windows.Forms.Panel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetSizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripPlayerLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTimeLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripPauseButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // GamePanel
             // 
+            this.GamePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GamePanel.Location = new System.Drawing.Point(11, 35);
             this.GamePanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.GamePanel.Name = "GamePanel";
@@ -47,17 +58,21 @@
             // 
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.aboutToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(620, 31);
+            this.menuStrip.Size = new System.Drawing.Size(624, 31);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "Menu";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.StartGameMenuItem});
+            this.StartGameMenuItem,
+            this.LoadGameMenuItem,
+            this.SetSizeMenuItem,
+            this.ExitMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(69, 27);
             this.fileToolStripMenuItem.Text = "Game";
@@ -65,14 +80,78 @@
             // StartGameMenuItem
             // 
             this.StartGameMenuItem.Name = "StartGameMenuItem";
-            this.StartGameMenuItem.Size = new System.Drawing.Size(179, 28);
+            this.StartGameMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.StartGameMenuItem.Size = new System.Drawing.Size(238, 28);
             this.StartGameMenuItem.Text = "Start Game";
+            // 
+            // LoadGameMenuItem
+            // 
+            this.LoadGameMenuItem.Name = "LoadGameMenuItem";
+            this.LoadGameMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.LoadGameMenuItem.Size = new System.Drawing.Size(238, 28);
+            this.LoadGameMenuItem.Text = "Load Game";
+            // 
+            // SetSizeMenuItem
+            // 
+            this.SetSizeMenuItem.Name = "SetSizeMenuItem";
+            this.SetSizeMenuItem.Size = new System.Drawing.Size(238, 28);
+            this.SetSizeMenuItem.Text = "Set Game Size";
+            // 
+            // ExitMenuItem
+            // 
+            this.ExitMenuItem.Name = "ExitMenuItem";
+            this.ExitMenuItem.Size = new System.Drawing.Size(238, 28);
+            this.ExitMenuItem.Text = "Exit";
+            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(71, 27);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripPlayerLabel,
+            this.toolStripTimeLabel,
+            this.toolStripPauseButton});
+            this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.toolStrip.Location = new System.Drawing.Point(0, 643);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(624, 30);
+            this.toolStrip.TabIndex = 2;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripPlayerLabel
+            // 
+            this.toolStripPlayerLabel.Name = "toolStripPlayerLabel";
+            this.toolStripPlayerLabel.Size = new System.Drawing.Size(65, 23);
+            this.toolStripPlayerLabel.Text = "Player: ";
+            // 
+            // toolStripTimeLabel
+            // 
+            this.toolStripTimeLabel.Name = "toolStripTimeLabel";
+            this.toolStripTimeLabel.Size = new System.Drawing.Size(56, 23);
+            this.toolStripTimeLabel.Text = "Time: ";
+            // 
+            // toolStripPauseButton
+            // 
+            this.toolStripPauseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripPauseButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripPauseButton.Image")));
+            this.toolStripPauseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripPauseButton.Name = "toolStripPauseButton";
+            this.toolStripPauseButton.Size = new System.Drawing.Size(78, 27);
+            this.toolStripPauseButton.Text = "Pause";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(620, 643);
+            this.ClientSize = new System.Drawing.Size(624, 673);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.GamePanel);
             this.Controls.Add(this.menuStrip);
             this.MainMenuStrip = this.menuStrip;
@@ -83,6 +162,8 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,5 +175,13 @@
         private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem StartGameMenuItem;
+        private ToolStripMenuItem SetSizeMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem LoadGameMenuItem;
+        private ToolStripMenuItem ExitMenuItem;
+        private ToolStrip toolStrip;
+        private ToolStripLabel toolStripPlayerLabel;
+        private ToolStripLabel toolStripTimeLabel;
+        private ToolStripButton toolStripPauseButton;
     }
 }

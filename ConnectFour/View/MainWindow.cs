@@ -5,22 +5,33 @@ namespace ConnectFour
 {
     public partial class MainWindow : Form
     {
+        // TODO: set game size implementation
+
+        private Point GameSize;
         // The game's model agregated inside view
-        private Game _game;
+        private Game          _game;
         // Picture box grid for the fields of the game
         private PictureBox[,] _pictureBoxGrid;
 
         public MainWindow()
         {
             InitializeComponent();
-            _pictureBoxGrid  = new PictureBox[7, 7];
-            _game            = new Game(7, 7);
+
+            GameSize = new Point(10, 10);
+            
+            //this.Scale(1.5F); // is decent for 30 x 30
+            //this.Scale(1.2F); // is decent for 20 x 20
+            
+            _pictureBoxGrid    = new PictureBox[GameSize.X, GameSize.Y];
+            _game              = new Game(GameSize.X, GameSize.Y);
             _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
             _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
             _game.GameEnd     += new EventHandler(Game_GameEnded);
+            
             StartGameMenuItem.Click += StartGameMenuItem_Click;
 
             InitializePictureGrid();
+            toolStripPlayerLabel.Text = "Player: ";
         }
 
         private void InitializePictureGrid()
@@ -49,48 +60,69 @@ namespace ConnectFour
             }
         }
 
+        private void RestartGame()
+        {
+            _game = new Game(GameSize.X, GameSize.Y);
+            _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
+            _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
+            _game.GameEnd     += new EventHandler(Game_GameEnded);
+            UpdatePictureGrid();
+        }
+
+        private void UpdatePictureGrid()
+        {
+            for (int i = 0; i < GameSize.X; i++)
+            {
+                for (int j = 0; j < GameSize.Y; j++)
+                {
+                    _pictureBoxGrid[i, j].Image = Image.FromFile(@".\resources\border.png");
+                }
+            }
+        }
+
         #region Model Event Handlers
 
         private void Game_TileChanged(object? sender, TileChangedEventArgs e)
         {
-            _pictureBoxGrid[e.X, e.Y].Image = e.PlayerOnTile == Player.RED ? Image.FromFile(@".\resources\x.png") : Image.FromFile(@".\resources\o.png");
+            _pictureBoxGrid[e.X, e.Y].Image = e.PlayerOnTile == Player.X ? Image.FromFile(@".\resources\x.png") : Image.FromFile(@".\resources\o.png");
+            // set text on toolStrip
+            toolStripPlayerLabel.Text = e.PlayerOnTile == Player.X ? "Player: O" : "Player: X";
         }
 
         private void Game_GameWon(object? sender, GameWonEventArgs e)
         {
+            toolStripPlayerLabel.Text = "Player: "; // set text on toolStrip
+
             foreach (var v in _game.WinningPointStack)
             {
                 Console.WriteLine(v.ToString());
             }
             
-            if (e.State == GameState.WON_BY_RED)
+            if (e.State == GameState.WON_BY_X)
             {
                 for (int i = 0; i < e.WinningCoordList.Count; i++)
                 {
                     _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win_x.png");
                 }
-                MessageBox.Show("X won!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("X won the game!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-            if (e.State == GameState.WON_BY_YELLOW)
+            if (e.State == GameState.WON_BY_O)
             {
                 for (int i = 0; i < e.WinningCoordList.Count; i++)
                 {
                     _pictureBoxGrid[e.WinningCoordList[i].X, e.WinningCoordList[i].Y].Image = Image.FromFile($@".\resources\win_o.png");
                 }
-                MessageBox.Show("O won!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("O won the game!", "Game Won!", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
-
-            _game.StartGame();
-            GamePanel.Controls.Clear();
-            InitializePictureGrid();
+            
+            RestartGame();
         }
 
         private void Game_GameEnded(object? sender, EventArgs e)
         {
             MessageBox.Show("Draw!", "Game Over", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            _game.StartGame();
-            GamePanel.Controls.Clear();
-            InitializePictureGrid();
+            
+            RestartGame();
         }
 
         #endregion
@@ -112,7 +144,7 @@ namespace ConnectFour
             
             int col = Convert.ToInt32(pictureBox!.Tag.ToString());
             if (_game.GetRow(col) > -1) _pictureBoxGrid[_game.GetRow(col), col].Image =
-                _game.CurrentPlayer == Player.RED ? Image.FromFile(@".\resources\prev_x.png") : Image.FromFile(@".\resources\prev_o.png");
+                _game.CurrentPlayer == Player.X ? Image.FromFile(@".\resources\prev_x.png") : Image.FromFile(@".\resources\prev_o.png");
         }
 
         private void PictureBox_MouseLeave(object? sender, EventArgs e)
@@ -127,18 +159,17 @@ namespace ConnectFour
 
         private void StartGameMenuItem_Click (object? sender, EventArgs e)
         {
-            GamePanel.Controls.Clear();
-            InitializePictureGrid();
-            
-            _game              = new Game(7, 7);
-            _game.TileChanged += new EventHandler<TileChangedEventArgs>(Game_TileChanged);
-            _game.GameWon     += new EventHandler<GameWonEventArgs>(Game_GameWon);
-            _game.GameEnd     += new EventHandler(Game_GameEnded);
+            RestartGame();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
             BackColor = Color.WhiteSmoke;
+        }
+
+        private void ExitMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
