@@ -28,19 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.GamePanel = new System.Windows.Forms.Panel();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StartGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SetSizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripPlayerLabel = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripTimeLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripPauseButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripPlayerLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripTimeLabel = new System.Windows.Forms.ToolStripLabel();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +65,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(624, 31);
+            this.menuStrip.Size = new System.Drawing.Size(622, 31);
             this.menuStrip.TabIndex = 1;
             this.menuStrip.Text = "Menu";
             // 
@@ -70,6 +73,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StartGameMenuItem,
+            this.SaveGameMenuItem,
             this.LoadGameMenuItem,
             this.SetSizeMenuItem,
             this.ExitMenuItem});
@@ -84,6 +88,13 @@
             this.StartGameMenuItem.Size = new System.Drawing.Size(238, 28);
             this.StartGameMenuItem.Text = "Start Game";
             // 
+            // SaveGameMenuItem
+            // 
+            this.SaveGameMenuItem.Name = "SaveGameMenuItem";
+            this.SaveGameMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.SaveGameMenuItem.Size = new System.Drawing.Size(238, 28);
+            this.SaveGameMenuItem.Text = "Save Game";
+            // 
             // LoadGameMenuItem
             // 
             this.LoadGameMenuItem.Name = "LoadGameMenuItem";
@@ -96,6 +107,7 @@
             this.SetSizeMenuItem.Name = "SetSizeMenuItem";
             this.SetSizeMenuItem.Size = new System.Drawing.Size(238, 28);
             this.SetSizeMenuItem.Text = "Set Game Size";
+            this.SetSizeMenuItem.Click += new System.EventHandler(this.SetSizeMenuItem_Click);
             // 
             // ExitMenuItem
             // 
@@ -115,15 +127,37 @@
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
+            this.toolStripPauseButton,
+            this.toolStripSeparator2,
             this.toolStripPlayerLabel,
-            this.toolStripTimeLabel,
-            this.toolStripPauseButton});
+            this.toolStripSeparator3,
+            this.toolStripTimeLabel});
             this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip.Location = new System.Drawing.Point(0, 643);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(624, 30);
+            this.toolStrip.Size = new System.Drawing.Size(622, 30);
             this.toolStrip.TabIndex = 2;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
+            // 
+            // toolStripPauseButton
+            // 
+            this.toolStripPauseButton.Image = global::ConnectFour.Properties.Resources.pause;
+            this.toolStripPauseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripPauseButton.Name = "toolStripPauseButton";
+            this.toolStripPauseButton.Size = new System.Drawing.Size(78, 27);
+            this.toolStripPauseButton.Text = "Pause";
+            this.toolStripPauseButton.Click += new System.EventHandler(this.ToolStripPauseButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
             // 
             // toolStripPlayerLabel
             // 
@@ -131,33 +165,31 @@
             this.toolStripPlayerLabel.Size = new System.Drawing.Size(65, 23);
             this.toolStripPlayerLabel.Text = "Player: ";
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 23);
+            // 
             // toolStripTimeLabel
             // 
             this.toolStripTimeLabel.Name = "toolStripTimeLabel";
             this.toolStripTimeLabel.Size = new System.Drawing.Size(56, 23);
             this.toolStripTimeLabel.Text = "Time: ";
             // 
-            // toolStripPauseButton
-            // 
-            this.toolStripPauseButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripPauseButton.Image = ((System.Drawing.Image)(resources.GetObject("toolStripPauseButton.Image")));
-            this.toolStripPauseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripPauseButton.Name = "toolStripPauseButton";
-            this.toolStripPauseButton.Size = new System.Drawing.Size(78, 27);
-            this.toolStripPauseButton.Text = "Pause";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 673);
+            this.ClientSize = new System.Drawing.Size(622, 673);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.GamePanel);
             this.Controls.Add(this.menuStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "MainWindow";
+            this.ShowIcon = false;
             this.Text = "Connect Four";
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.menuStrip.ResumeLayout(false);
@@ -182,6 +214,10 @@
         private ToolStrip toolStrip;
         private ToolStripLabel toolStripPlayerLabel;
         private ToolStripLabel toolStripTimeLabel;
+        private ToolStripMenuItem SaveGameMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
         private ToolStripButton toolStripPauseButton;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripSeparator toolStripSeparator3;
     }
 }
