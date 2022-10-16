@@ -44,6 +44,10 @@
             this.toolStripPlayerLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTimeLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripXLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripOLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -132,13 +136,17 @@
             this.toolStripSeparator2,
             this.toolStripPlayerLabel,
             this.toolStripSeparator3,
-            this.toolStripTimeLabel});
+            this.toolStripTimeLabel,
+            this.toolStripSeparator4,
+            this.toolStripXLabel,
+            this.toolStripSeparator5,
+            this.toolStripOLabel});
             this.toolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStrip.Location = new System.Drawing.Point(0, 643);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(622, 30);
             this.toolStrip.TabIndex = 2;
-            this.toolStrip.Text = "toolStrip1";
+            this.toolStrip.Text = "toolStrip";
             // 
             // toolStripSeparator1
             // 
@@ -175,6 +183,28 @@
             this.toolStripTimeLabel.Name = "toolStripTimeLabel";
             this.toolStripTimeLabel.Size = new System.Drawing.Size(56, 23);
             this.toolStripTimeLabel.Text = "Time: ";
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 23);
+            // 
+            // toolStripXLabel
+            // 
+            this.toolStripXLabel.Name = "toolStripXLabel";
+            this.toolStripXLabel.Size = new System.Drawing.Size(71, 23);
+            this.toolStripXLabel.Text = "X Time: ";
+            // 
+            // toolStripOLabel
+            // 
+            this.toolStripOLabel.Name = "toolStripOLabel";
+            this.toolStripOLabel.Size = new System.Drawing.Size(74, 23);
+            this.toolStripOLabel.Text = "O Time: ";
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 23);
             // 
             // MainWindow
             // 
@@ -219,5 +249,9 @@
         private ToolStripButton toolStripPauseButton;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripLabel toolStripXLabel;
+        private ToolStripLabel toolStripOLabel;
+        private ToolStripSeparator toolStripSeparator5;
     }
 }
