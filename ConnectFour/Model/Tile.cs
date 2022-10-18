@@ -18,8 +18,21 @@
             Value = value;
         }
 
+        public static Tile MakeTile(char value)
+        {
+            if (value == 'x')
+            {
+                return new Tile(TileValue.X);
+            }
+            if (value == 'o')
+            {
+                return new Tile(TileValue.O);
+            }
+            return new Tile(TileValue.EMPTY);
+        }
+
         public bool IsEmpty () { return Value == TileValue.EMPTY; }
-        public bool IsRed () { return Value == TileValue.X; }
-        public bool IsYellow () { return Value == TileValue.O; }
+        public bool IsX () { return Value == TileValue.X; }
+        public bool ISO () { return Value == TileValue.O; }
     }
 }

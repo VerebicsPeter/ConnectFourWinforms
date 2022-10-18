@@ -34,9 +34,9 @@
             this.StartGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SetSizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SetGameSizeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripPauseButton = new System.Windows.Forms.ToolStripButton();
@@ -46,8 +46,10 @@
             this.toolStripTimeLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripXLabel = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripOLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripOLabel = new System.Windows.Forms.ToolStripLabel();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +81,6 @@
             this.StartGameMenuItem,
             this.SaveGameMenuItem,
             this.LoadGameMenuItem,
-            this.SetSizeMenuItem,
             this.ExitMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(69, 27);
@@ -98,6 +99,7 @@
             this.SaveGameMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.SaveGameMenuItem.Size = new System.Drawing.Size(238, 28);
             this.SaveGameMenuItem.Text = "Save Game";
+            this.SaveGameMenuItem.Click += new System.EventHandler(this.SaveGameMenuItem_Click);
             // 
             // LoadGameMenuItem
             // 
@@ -105,13 +107,7 @@
             this.LoadGameMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
             this.LoadGameMenuItem.Size = new System.Drawing.Size(238, 28);
             this.LoadGameMenuItem.Text = "Load Game";
-            // 
-            // SetSizeMenuItem
-            // 
-            this.SetSizeMenuItem.Name = "SetSizeMenuItem";
-            this.SetSizeMenuItem.Size = new System.Drawing.Size(238, 28);
-            this.SetSizeMenuItem.Text = "Set Game Size";
-            this.SetSizeMenuItem.Click += new System.EventHandler(this.SetSizeMenuItem_Click);
+            this.LoadGameMenuItem.Click += new System.EventHandler(this.LoadGameMenuItem_Click);
             // 
             // ExitMenuItem
             // 
@@ -122,9 +118,18 @@
             // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SetGameSizeMenuItem});
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(71, 27);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(85, 27);
+            this.aboutToolStripMenuItem.Text = "Settings";
+            // 
+            // SetGameSizeMenuItem
+            // 
+            this.SetGameSizeMenuItem.Name = "SetGameSizeMenuItem";
+            this.SetGameSizeMenuItem.Size = new System.Drawing.Size(203, 28);
+            this.SetGameSizeMenuItem.Text = "Set Game Size";
+            this.SetGameSizeMenuItem.Click += new System.EventHandler(this.SetGameSizeMenuItem_Click);
             // 
             // toolStrip
             // 
@@ -170,8 +175,8 @@
             // toolStripPlayerLabel
             // 
             this.toolStripPlayerLabel.Name = "toolStripPlayerLabel";
-            this.toolStripPlayerLabel.Size = new System.Drawing.Size(65, 23);
-            this.toolStripPlayerLabel.Text = "Player: ";
+            this.toolStripPlayerLabel.Size = new System.Drawing.Size(60, 23);
+            this.toolStripPlayerLabel.Text = "Player:";
             // 
             // toolStripSeparator3
             // 
@@ -181,8 +186,8 @@
             // toolStripTimeLabel
             // 
             this.toolStripTimeLabel.Name = "toolStripTimeLabel";
-            this.toolStripTimeLabel.Size = new System.Drawing.Size(56, 23);
-            this.toolStripTimeLabel.Text = "Time: ";
+            this.toolStripTimeLabel.Size = new System.Drawing.Size(51, 23);
+            this.toolStripTimeLabel.Text = "Time:";
             // 
             // toolStripSeparator4
             // 
@@ -192,19 +197,28 @@
             // toolStripXLabel
             // 
             this.toolStripXLabel.Name = "toolStripXLabel";
-            this.toolStripXLabel.Size = new System.Drawing.Size(71, 23);
-            this.toolStripXLabel.Text = "X Time: ";
-            // 
-            // toolStripOLabel
-            // 
-            this.toolStripOLabel.Name = "toolStripOLabel";
-            this.toolStripOLabel.Size = new System.Drawing.Size(74, 23);
-            this.toolStripOLabel.Text = "O Time: ";
+            this.toolStripXLabel.Size = new System.Drawing.Size(68, 23);
+            this.toolStripXLabel.Text = "X-Time:";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 23);
+            // 
+            // toolStripOLabel
+            // 
+            this.toolStripOLabel.Name = "toolStripOLabel";
+            this.toolStripOLabel.Size = new System.Drawing.Size(71, 23);
+            this.toolStripOLabel.Text = "O-Time:";
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.Filter = "Connect Four Save File (*.cfs)|*.cfs";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "Connect Four Save File (*.cfs)|*.cfs";
             // 
             // MainWindow
             // 
@@ -237,7 +251,6 @@
         private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
         private ToolStripMenuItem StartGameMenuItem;
-        private ToolStripMenuItem SetSizeMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem LoadGameMenuItem;
         private ToolStripMenuItem ExitMenuItem;
@@ -253,5 +266,8 @@
         private ToolStripLabel toolStripXLabel;
         private ToolStripLabel toolStripOLabel;
         private ToolStripSeparator toolStripSeparator5;
+        private OpenFileDialog openFileDialog;
+        private ToolStripMenuItem SetGameSizeMenuItem;
+        private SaveFileDialog saveFileDialog;
     }
 }
